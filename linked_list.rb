@@ -32,8 +32,6 @@ class LinkedList
         if @head.nil?
         #     @head = Node.new(value)
         else
-            p @head
-            p head.next_node
             @head = Node.new(value, @head)                           #-1 10-2-4
         end
     end
@@ -75,13 +73,75 @@ class LinkedList
         if @head.nil?
             return
         elsif current_node.next_node.next_node.nil?
-            p current_node
             current_node.next_node = nil
             p "Last element was popped"
-            p current_node
             return
         else
             pop(current_node.next_node)
+        end
+    end
+
+    def contain?(value, current_node = @head)
+        state = false
+        if current_node.value == value
+            state =true
+            return p "Does the list contain #{value}? -> #{state}"
+        elsif current_node.next_node.nil?
+            return p "Does the list contain #{value}? -> #{state}"
+        else
+            contain?(value, current_node.next_node)
+        end
+        # return p "Does the list contain #{value}? -> #{state}"
+    end
+
+    def find?(value, current_node = @head, index = 0)
+        state = false
+        if current_node.value == value
+            state =true
+            return p "List contains value #{value} at index-> #{index}"
+        elsif current_node.next_node.nil?
+            return p "List contains value #{value}? Nil"
+        else
+            find?(value, current_node.next_node, index + 1)
+        end
+        # return p "Does the list contain #{value}? -> #{state}" 
+    end
+
+    def to_s(current_node = @head, current_string = "")
+        if (current_node.next_node.nil?)
+            return p current_string += "#{current_node.value} -> Nil"
+        else 
+            current_string += "#{ current_node.value} -> "
+            to_s(current_node.next_node, current_string)
+        end
+        
+    end
+
+
+    def insert_at(value, index, current_node=@head, current_index = 0)
+        if index == current_index + 1
+            remainder = current_node.next_node
+            # current_node.next_node = nil
+            current_node.next_node = Node.new(value, remainder)
+        elsif current_node.next_node.nil?
+            return p"Invalid, list end"
+        else
+            insert_at(value, index, current_node.next_node, current_index + 1)
+        end
+
+            
+
+    end
+
+    def remove_at(index, current_node=@head, current_index = 0)
+        if index == current_index + 1
+            remainder_value = current_node.next_node.next_node.value
+            remainder = current_node.next_node.next_node
+            current_node.next_node = remainder
+        elsif current_node.next_node.nil?
+            return p"Invalid, list end"
+        else
+            remove_at(index, current_node.next_node, current_index + 1)
         end
     end
 
@@ -93,17 +153,27 @@ my_list.append(3)
 my_list.append(4)
 my_list.append(5)
 my_list.append(6)
-
 my_list.prepend(1)
 my_list.prepend(0)
 p "Size: #{my_list.size}"
-# puts  my_list
 p "Head: #{my_list.head.value}"
 p "Tail: #{my_list.tail.value}"
 my_list.at(3)
-my_list.print_list
+my_list.to_s
 my_list.pop
-my_list.print_list
+my_list.to_s
+my_list.contain?(3)
+my_list.contain?(8)
+my_list.find?(3)
+my_list.find?(8)
+my_list.to_s
+my_list.insert_at(90, 2)
+my_list.to_s
+my_list.remove_at(2)
+my_list.to_s
+
+
+
 
 
 
